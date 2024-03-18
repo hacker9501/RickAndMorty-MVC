@@ -1,5 +1,5 @@
 //
-//  CharacterListViewController.swift
+//  CharacterDetailViewController.swift
 //  RickAndMortyMVC
 //
 //  Created by Elver Mayta Hernández on 14/03/24.
@@ -8,31 +8,27 @@
 import Foundation
 import UIKit
 
-class CharacterDetaViewController: UIViewController {
+class CharacterDetailViewController: UIViewController {
 
-    var mainView: CharacterListView {self.view as! CharacterListView}
-    let apiclient = ApiClient()
-    private var tableViewDatasource: ListOfCharacterTableViewDatasourse?
-    private var tableviewDelegate: ListCharacterTableViewDelegate?
+    var mainView: CharacterDetailView {self.view as! CharacterDetailView}
+    
+    init(characterDetailModel: CharacterModel){
+        super.init(nibName: nil, bundle: nil)
+        mainView.configure(characterDetailModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
-        view = CharacterListView()
-        tableviewDelegate = ListCharacterTableViewDelegate()
+        view = CharacterDetailView()
         
-        tableViewDatasource = ListOfCharacterTableViewDatasourse(tableView: mainView.charactersTableView)
-        mainView.charactersTableView.dataSource = tableViewDatasource
-        mainView.charactersTableView.delegate = tableviewDelegate
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        Task{
-            let characters = await apiclient.getLisOfCharacters()
-            print("datos character : \(characters)")
-            
-            tableViewDatasource?.set(characters: characters.results)
-        }
     }
     
 }
